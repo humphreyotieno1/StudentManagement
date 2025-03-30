@@ -1,17 +1,15 @@
-# Student Details
+# Student Management System
 
-A comprehensive full-stack solution for managing student information, developed with Angular, TypeScript, and Node.js.
+A full-stack application for managing student records, built with Angular, TypeScript, and Node.js.
 
 ## Features
 
 - Student information management
   - Complete CRUD operations for student profiles
-  - Advanced form validation with real-time feedback
-  - Modern UI with responsive two-column layout
-  - Material Design-inspired components
-  - Multi-layer data validation
-  - Secure authentication system
-  - Role-based access control
+  - Form validation with real-time feedback
+  - Modern UI with responsive design
+  - Data validation at multiple levels
+  - MongoDB database with schema validation
 
 ## Prerequisites
 
@@ -24,7 +22,7 @@ A comprehensive full-stack solution for managing student information, developed 
 ## Project Structure
 
 ```
-student-details/
+student-management/
 ├── frontend/          # Angular frontend application
 │   ├── src/
 │   │   ├── app/      # Application components
@@ -38,34 +36,38 @@ student-details/
     │   ├── controllers/  # Route controllers
     │   ├── models/       # Database models
     │   ├── routes/       # API routes
-    │   └── services/     # Business logic
+    │   ├── middleware/   # Custom middleware
+    │   ├── types/        # TypeScript types
+    │   └── config/       # Configuration files
     └── migrations/       # Database migrations
 ```
 
-## UI Features
+## Database Schema
 
-- Modern two-column form layout
-- Responsive design that adapts to all screen sizes
-- Real-time form validation with visual feedback
-- Clean and intuitive user interface
-- Material Design-inspired components
-- Smooth transitions and animations
-- Accessible form controls
-- Mobile-friendly interface
+The application uses MongoDB with the following student schema:
+
+```typescript
+{
+  firstName: string;      // Required, min 2 chars
+  lastName: string;       // Required, min 2 chars
+  email: string;         // Required, unique, valid email format
+  dateOfBirth: Date;     // Required, valid date
+  major: string;         // Required, min 2 chars
+  gpa: number;          // Required, 0.0-4.0 scale
+  enrollmentDate: Date;  // Auto-set on creation
+  createdAt?: Date;     // Auto-set by Mongoose
+  updatedAt?: Date;     // Auto-set by Mongoose
+}
+```
 
 ## Setup Instructions
 
-### MongoDB Installation
+### MongoDB Setup
 
-1. Download MongoDB Community Server from [MongoDB Download Center](https://www.mongodb.com/try/download/community)
-2. Run the installer and follow the installation wizard
-3. Create a data directory:
+1. Install MongoDB Community Server from [MongoDB Download Center](https://www.mongodb.com/try/download/community)
+2. Start MongoDB service:
    ```bash
-   mkdir C:\data\db
-   ```
-4. Start MongoDB service:
-   ```bash
-   net start MongoDB
+   sudo systemctl start mongodb
    ```
 
 ### Backend Setup
@@ -83,17 +85,13 @@ student-details/
 3. Create a `.env` file in the backend directory:
    ```
    PORT=8000
-   MONGODB_URI=mongodb://localhost:27017/student_details
+   MONGODB_URI=mongodb://localhost:27017/academic_records
    NODE_ENV=development
-   JWT_SECRET=your_jwt_secret_here
+   RATE_LIMIT_WINDOW=15
+   RATE_LIMIT_MAX=100
    ```
 
-4. Initialize the database:
-   ```bash
-   npm run db:init
-   ```
-
-5. Run database migrations:
+4. Run database migrations:
    ```bash
    npm run migrate:up
    ```
@@ -108,13 +106,6 @@ student-details/
 2. Install dependencies:
    ```bash
    npm install
-   ```
-
-3. Create a `.env` file in the frontend directory:
-   ```
-   API_URL=http://localhost:8000
-   ENVIRONMENT=development
-   APP_TITLE=Student Management System
    ```
 
 ## Running the Application
@@ -157,7 +148,6 @@ student-details/
 - `npm run dev`: Start development server with hot reloading
 - `npm run build`: Build TypeScript code
 - `npm start`: Start production server
-- `npm run db:init`: Initialize database
 - `npm run migrate:up`: Run database migrations
 - `npm run migrate:down`: Rollback migrations
 - `npm run migrate:status`: Check migration status
@@ -170,13 +160,10 @@ student-details/
 - `ng serve`: Start development server
 - `ng build`: Build production version
 - `ng test`: Run unit tests
-- `ng e2e`: Run end-to-end tests
 - `ng lint`: Run linting
 - `ng generate`: Generate components, services, etc.
 
-## API Documentation
-
-The backend API provides the following endpoints:
+## API Endpoints
 
 ### Student Records
 - `GET /api/students`: Get all student records
@@ -185,51 +172,27 @@ The backend API provides the following endpoints:
 - `PUT /api/students/:id`: Update student record
 - `DELETE /api/students/:id`: Delete student record
 
-## Student Data Model
+## Data Validation
 
-Each record includes:
-- First Name (required, min 2 chars)
-- Last Name (required, min 2 chars)
-- Email (required, unique, valid format)
-- Date of Birth (required, future dates invalid)
-- Major (required, min 2 chars)
-- GPA (required, 0.0-4.0 scale)
-- Enrollment Date (auto-set)
+The application implements validation at multiple levels:
 
-## UI Components
+1. Frontend Form Validation:
+   - Required field validation
+   - Email format validation
+   - GPA range validation (0.0-4.0)
+   - Date format validation
 
-### Form Layout
-- Two-column responsive grid layout
-- Clear visual hierarchy
-- Intuitive field grouping
-- Real-time validation feedback
-- Mobile-optimized design
+2. Backend Validation:
+   - Mongoose schema validation
+   - Custom middleware validation
+   - MongoDB schema validation
 
-### Styling Features
-- Modern color scheme
-- Consistent spacing and typography
-- Smooth transitions and animations
-- Accessible form controls
-- Error state handling
-- Loading states
-- Responsive breakpoints
+3. Database Constraints:
+   - Unique email constraint
+   - Required fields
+   - Field type validation
+   - Range validation for numeric fields
 
-## Security Features
-
-- JWT-based authentication
-- Password hashing with bcrypt
-- Rate limiting
-- Input sanitization
-- CORS protection
-- XSS prevention
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/new-feature`)
-3. Commit changes (`git commit -m 'Add new feature'`)
-4. Push to branch (`git push origin feature/new-feature`)
-5. Open Pull Request
 
 ## License
 

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const DB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/student-record-db';
+const DB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/academic_records';
 
 const dbConfig = {
     useNewUrlParser: true,

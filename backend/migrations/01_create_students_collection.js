@@ -1,22 +1,22 @@
 module.exports = {
   async up(db) {
-    await db.createCollection('academic_records', {
+    await db.createCollection('students', {
       validator: {
         $jsonSchema: {
           bsonType: 'object',
-          required: ['givenName', 'familyName', 'academicEmail', 'dateOfBirth', 'programOfStudy', 'academicStanding', 'registrationDate'],
+          required: ['firstName', 'lastName', 'email', 'dateOfBirth', 'major', 'gpa'],
           properties: {
-            givenName: {
+            firstName: {
               bsonType: 'string',
               minLength: 2,
-              description: 'Given name must be a string of at least 2 characters'
+              description: 'First name must be a string of at least 2 characters'
             },
-            familyName: {
+            lastName: {
               bsonType: 'string',
               minLength: 2,
-              description: 'Family name must be a string of at least 2 characters'
+              description: 'Last name must be a string of at least 2 characters'
             },
-            academicEmail: {
+            email: {
               bsonType: 'string',
               pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$',
               description: 'Must be a valid email address'
@@ -25,50 +25,41 @@ module.exports = {
               bsonType: 'date',
               description: 'Must be a valid date'
             },
-            programOfStudy: {
+            major: {
               bsonType: 'string',
               minLength: 2,
-              description: 'Program of study must be a string of at least 2 characters'
+              description: 'Major must be a string of at least 2 characters'
             },
-            academicStanding: {
+            gpa: {
               bsonType: 'number',
               minimum: 0.0,
               maximum: 4.0,
-              description: 'Academic standing must be a number between 0.0 and 4.0'
+              description: 'GPA must be a number between 0.0 and 4.0'
             },
-            registrationDate: {
+            enrollmentDate: {
               bsonType: 'date',
-              description: 'Registration date must be a valid date'
-            },
-            status: {
-              bsonType: 'string',
-              enum: ['active', 'inactive', 'graduated', 'on_leave'],
-              description: 'Status must be one of: active, inactive, graduated, or on_leave'
-            },
-            notes: {
-              bsonType: 'string',
-              description: 'Optional notes about the student'
+              description: 'Enrollment date must be a valid date'
             }
           }
         }
       }
     });
 
-    await db.collection('academic_records').createIndex(
-      { academicEmail: 1 },
+    await db.collection('students').createIndex(
+      { email: 1 },
       { unique: true }
     );
 
-    await db.collection('academic_records').createIndex(
-      { givenName: 1, familyName: 1 }
+    await db.collection('students').createIndex(
+      { lastName: 1, firstName: 1 }
     );
 
-    await db.collection('academic_records').createIndex(
-      { programOfStudy: 1 }
+    await db.collection('students').createIndex(
+      { major: 1 }
     );
   },
 
   async down(db) {
-    await db.collection('academic_records').drop();
+    await db.collection('students').drop();
   }
 }; 
