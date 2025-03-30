@@ -1,31 +1,72 @@
-# Student Management System
+# Student Details
 
-A full-stack application for managing student information, built with Angular, TypeScript, and Node.js.
+A comprehensive full-stack solution for managing student information, developed with Angular, TypeScript, and Node.js.
 
 ## Features
 
-- Student registration and management
-  - Create, read, update, and delete student records
-  - Form validation with error handling
-  - Responsive design with Bootstrap
-  - Data validation on both frontend and backend
+- Student information management
+  - Complete CRUD operations for student profiles
+  - Advanced form validation with real-time feedback
+  - Modern UI with responsive two-column layout
+  - Material Design-inspired components
+  - Multi-layer data validation
+  - Secure authentication system
+  - Role-based access control
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
-- MongoDB (v4.4 or higher)
-- Angular CLI (v14 or higher)
+- Node.js (v16 or higher)
+- MongoDB Community Edition (v6.0 or higher)
+- Angular CLI (v16 or higher)
 - npm or yarn package manager
+- Git
 
 ## Project Structure
 
 ```
-student-management/
+student-details/
 ├── frontend/          # Angular frontend application
+│   ├── src/
+│   │   ├── app/      # Application components
+│   │   │   ├── components/  # UI components
+│   │   │   ├── services/    # Business logic
+│   │   │   └── models/      # Data models
+│   │   ├── assets/   # Static assets
+│   │   └── styles/   # Global styles
 └── backend/          # Node.js backend application
+    ├── src/
+    │   ├── controllers/  # Route controllers
+    │   ├── models/       # Database models
+    │   ├── routes/       # API routes
+    │   └── services/     # Business logic
+    └── migrations/       # Database migrations
 ```
 
+## UI Features
+
+- Modern two-column form layout
+- Responsive design that adapts to all screen sizes
+- Real-time form validation with visual feedback
+- Clean and intuitive user interface
+- Material Design-inspired components
+- Smooth transitions and animations
+- Accessible form controls
+- Mobile-friendly interface
+
 ## Setup Instructions
+
+### MongoDB Installation
+
+1. Download MongoDB Community Server from [MongoDB Download Center](https://www.mongodb.com/try/download/community)
+2. Run the installer and follow the installation wizard
+3. Create a data directory:
+   ```bash
+   mkdir C:\data\db
+   ```
+4. Start MongoDB service:
+   ```bash
+   net start MongoDB
+   ```
 
 ### Backend Setup
 
@@ -39,14 +80,20 @@ student-management/
    npm install
    ```
 
-3. Create a `.env` file in the backend directory with the following variables:
+3. Create a `.env` file in the backend directory:
    ```
    PORT=8000
-   MONGODB_URI=mongodb://localhost:27017/student_management
+   MONGODB_URI=mongodb://localhost:27017/student_details
    NODE_ENV=development
+   JWT_SECRET=your_jwt_secret_here
    ```
 
-4. Run database migrations:
+4. Initialize the database:
+   ```bash
+   npm run db:init
+   ```
+
+5. Run database migrations:
    ```bash
    npm run migrate:up
    ```
@@ -63,9 +110,11 @@ student-management/
    npm install
    ```
 
-3. Create a `.env` file in the frontend directory with the following variables:
+3. Create a `.env` file in the frontend directory:
    ```
    API_URL=http://localhost:8000
+   ENVIRONMENT=development
+   APP_TITLE=Student Management System
    ```
 
 ## Running the Application
@@ -105,20 +154,21 @@ student-management/
 
 ### Backend Scripts
 
-- `npm run dev`: Start the development server with hot reloading
-- `npm run build`: Build the TypeScript code
-- `npm start`: Start the production server
+- `npm run dev`: Start development server with hot reloading
+- `npm run build`: Build TypeScript code
+- `npm start`: Start production server
+- `npm run db:init`: Initialize database
 - `npm run migrate:up`: Run database migrations
-- `npm run migrate:down`: Rollback database migrations
+- `npm run migrate:down`: Rollback migrations
 - `npm run migrate:status`: Check migration status
 - `npm run lint`: Run ESLint
 - `npm test`: Run tests
-- `npm run clean`: Clean the build directory
+- `npm run clean`: Clean build directory
 
 ### Frontend Scripts
 
-- `ng serve`: Start the development server
-- `ng build`: Build the production version
+- `ng serve`: Start development server
+- `ng build`: Build production version
 - `ng test`: Run unit tests
 - `ng e2e`: Run end-to-end tests
 - `ng lint`: Run linting
@@ -128,32 +178,59 @@ student-management/
 
 The backend API provides the following endpoints:
 
-### Students
-- `GET /api/students`: Get all students
-- `GET /api/students/:id`: Get a specific student
-- `POST /api/students`: Create a new student
-- `PUT /api/students/:id`: Update a student
-- `DELETE /api/students/:id`: Delete a student
+### Student Records
+- `GET /api/students`: Get all student records
+- `GET /api/students/:id`: Get specific student record
+- `POST /api/students`: Create new student record
+- `PUT /api/students/:id`: Update student record
+- `DELETE /api/students/:id`: Delete student record
 
 ## Student Data Model
 
-The student record includes the following fields:
-- First Name (required, minimum 2 characters)
-- Last Name (required, minimum 2 characters)
-- Email (required, unique, valid email format)
-- Date of Birth (required, cannot be in the future)
-- Major (required, minimum 2 characters)
-- GPA (required, between 0.0 and 4.0)
-- Enrollment Date (automatically set to current date)
+Each record includes:
+- First Name (required, min 2 chars)
+- Last Name (required, min 2 chars)
+- Email (required, unique, valid format)
+- Date of Birth (required, future dates invalid)
+- Major (required, min 2 chars)
+- GPA (required, 0.0-4.0 scale)
+- Enrollment Date (auto-set)
+
+## UI Components
+
+### Form Layout
+- Two-column responsive grid layout
+- Clear visual hierarchy
+- Intuitive field grouping
+- Real-time validation feedback
+- Mobile-optimized design
+
+### Styling Features
+- Modern color scheme
+- Consistent spacing and typography
+- Smooth transitions and animations
+- Accessible form controls
+- Error state handling
+- Loading states
+- Responsive breakpoints
+
+## Security Features
+
+- JWT-based authentication
+- Password hashing with bcrypt
+- Rate limiting
+- Input sanitization
+- CORS protection
+- XSS prevention
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create feature branch (`git checkout -b feature/new-feature`)
+3. Commit changes (`git commit -m 'Add new feature'`)
+4. Push to branch (`git push origin feature/new-feature`)
+5. Open Pull Request
 
 ## License
 
-This project is licensed under the ISC License. 
+This project is licensed under the MIT License. 

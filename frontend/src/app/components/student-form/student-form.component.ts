@@ -11,112 +11,246 @@ import { Student } from '../../models/student.model';
   imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="container mt-4">
-      <h2>{{ isEditMode ? 'Edit' : 'Add' }} Student</h2>
-      
-      <div *ngIf="errorMessage" class="alert alert-danger">
-        {{ errorMessage }}
+      <div class="form-container">
+        <h2 class="form-title">{{ isEditMode ? 'Edit' : 'Add' }} Student Details</h2>
+        
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+
+        <form [formGroup]="studentForm" (ngSubmit)="onSubmit()" class="needs-validation">
+          <div class="form-grid">
+            <!-- Left Column -->
+            <div class="form-column">
+              <div class="form-group">
+                <label for="firstName" class="form-label">First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstName"
+                  formControlName="firstName"
+                  [class.is-invalid]="isFieldInvalid('firstName')"
+                  placeholder="Enter first name"
+                >
+                <div class="invalid-feedback" *ngIf="isFieldInvalid('firstName')">
+                  {{ getFieldErrorMessage('firstName') }}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastName"
+                  formControlName="lastName"
+                  [class.is-invalid]="isFieldInvalid('lastName')"
+                  placeholder="Enter last name"
+                >
+                <div class="invalid-feedback" *ngIf="isFieldInvalid('lastName')">
+                  {{ getFieldErrorMessage('lastName') }}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  formControlName="email"
+                  [class.is-invalid]="isFieldInvalid('email')"
+                  placeholder="Enter email address"
+                >
+                <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+                  {{ getFieldErrorMessage('email') }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-column">
+              <div class="form-group">
+                <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="dateOfBirth"
+                  formControlName="dateOfBirth"
+                  [class.is-invalid]="isFieldInvalid('dateOfBirth')"
+                  [max]="today"
+                >
+                <div class="invalid-feedback" *ngIf="isFieldInvalid('dateOfBirth')">
+                  {{ getFieldErrorMessage('dateOfBirth') }}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="major" class="form-label">Major</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="major"
+                  formControlName="major"
+                  [class.is-invalid]="isFieldInvalid('major')"
+                  placeholder="Enter major"
+                >
+                <div class="invalid-feedback" *ngIf="isFieldInvalid('major')">
+                  {{ getFieldErrorMessage('major') }}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="gpa" class="form-label">GPA</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="gpa"
+                  formControlName="gpa"
+                  step="0.01"
+                  min="0"
+                  max="4"
+                  [class.is-invalid]="isFieldInvalid('gpa')"
+                  placeholder="Enter GPA"
+                >
+                <div class="invalid-feedback" *ngIf="isFieldInvalid('gpa')">
+                  {{ getFieldErrorMessage('gpa') }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="studentForm.invalid || isSubmitting">
+              {{ isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }}
+            </button>
+            <a href="/list" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
       </div>
-
-      <form [formGroup]="studentForm" (ngSubmit)="onSubmit()" class="needs-validation">
-        <div class="mb-3">
-          <label for="firstName" class="form-label">First Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="firstName"
-            formControlName="firstName"
-            [class.is-invalid]="isFieldInvalid('firstName')"
-          >
-          <div class="invalid-feedback" *ngIf="isFieldInvalid('firstName')">
-            {{ getFieldErrorMessage('firstName') }}
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="lastName" class="form-label">Last Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="lastName"
-            formControlName="lastName"
-            [class.is-invalid]="isFieldInvalid('lastName')"
-          >
-          <div class="invalid-feedback" *ngIf="isFieldInvalid('lastName')">
-            {{ getFieldErrorMessage('lastName') }}
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            formControlName="email"
-            [class.is-invalid]="isFieldInvalid('email')"
-          >
-          <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
-            {{ getFieldErrorMessage('email') }}
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="dateOfBirth" class="form-label">Date of Birth</label>
-          <input
-            type="date"
-            class="form-control"
-            id="dateOfBirth"
-            formControlName="dateOfBirth"
-            [class.is-invalid]="isFieldInvalid('dateOfBirth')"
-            [max]="today"
-          >
-          <div class="invalid-feedback" *ngIf="isFieldInvalid('dateOfBirth')">
-            {{ getFieldErrorMessage('dateOfBirth') }}
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="major" class="form-label">Major</label>
-          <input
-            type="text"
-            class="form-control"
-            id="major"
-            formControlName="major"
-            [class.is-invalid]="isFieldInvalid('major')"
-          >
-          <div class="invalid-feedback" *ngIf="isFieldInvalid('major')">
-            {{ getFieldErrorMessage('major') }}
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="gpa" class="form-label">GPA</label>
-          <input
-            type="number"
-            class="form-control"
-            id="gpa"
-            formControlName="gpa"
-            step="0.01"
-            min="0"
-            max="4"
-            [class.is-invalid]="isFieldInvalid('gpa')"
-          >
-          <div class="invalid-feedback" *ngIf="isFieldInvalid('gpa')">
-            {{ getFieldErrorMessage('gpa') }}
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary" [disabled]="studentForm.invalid || isSubmitting">
-          {{ isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }}
-        </button>
-        <a href="/list" class="btn btn-secondary ms-2">Cancel</a>
-      </form>
     </div>
   `,
   styles: [`
-    .container { max-width: 600px; }
-    .is-invalid { border-color: #dc3545; }
-    .invalid-feedback { display: block; }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .form-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+      color: #2c3e50;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: #4a5568;
+      margin-bottom: 0.25rem;
+    }
+
+    .form-control {
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: #4299e1;
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+      outline: none;
+    }
+
+    .form-control.is-invalid {
+      border-color: #e53e3e;
+    }
+
+    .invalid-feedback {
+      color: #e53e3e;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background-color: #4299e1;
+      border-color: #4299e1;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #3182ce;
+      border-color: #3182ce;
+    }
+
+    .btn-secondary {
+      background-color: #718096;
+      border-color: #718096;
+      color: white;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: #4a5568;
+      border-color: #4a5568;
+    }
+
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .form-container {
+        padding: 1rem;
+      }
+    }
   `]
 })
 export class StudentFormComponent implements OnInit {
