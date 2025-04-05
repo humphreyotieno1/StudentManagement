@@ -4,7 +4,7 @@ require('dotenv').config();
 const config = {
   mongodb: {
     url: process.env.MONGODB_URI || "mongodb://localhost:27017",
-    databaseName: "academic_records",
+    databaseName: "student_records",
     options: {
       useNewUrlParser: true,
       useUnifiedTopology: true

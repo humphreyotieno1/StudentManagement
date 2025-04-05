@@ -1,12 +1,16 @@
 import mongoose from 'mongoose';
 
-const DB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/student-record-db';
+const DB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/student_records';
 
 const dbConfig = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000,
     socketTimeoutMS: 45000,
+    maxPoolSize: 10,
+    minPoolSize: 5,
+    retryWrites: true,
+    w: 'majority'
 } as const;
 
 export const connectDB = async (): Promise<void> => {
@@ -19,7 +23,11 @@ export const connectDB = async (): Promise<void> => {
         });
 
         mongoose.connection.on('disconnected', () => {
-            console.log('MongoDB disconnected');
+            console.warn('MongoDB disconnected. Attempting to reconnect...');
+        });
+
+        mongoose.connection.on('reconnected', () => {
+            console.log('MongoDB reconnected successfully');
         });
 
         process.on('SIGINT', async () => {
@@ -29,7 +37,7 @@ export const connectDB = async (): Promise<void> => {
         });
 
     } catch (error) {
-        console.error('Error connecting to MongoDB:', error instanceof Error ? error.message : 'Unknown error');
+        console.error('MongoDB connection failed:', error);
         process.exit(1);
     }
 };

@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Student } from '../models/student.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StudentService {
-  private apiUrl = 'http://localhost:8000/api/students';
+  private apiUrl = `${environment.apiUrl}/students`;
 
   constructor(private http: HttpClient) { }
 
@@ -17,10 +18,8 @@ export class StudentService {
     if (error.error instanceof ErrorEvent) {
       // Client-side error
       errorMessage = error.error.message;
-      console.error('Client-side error:', error.error);
     } else {
       // Server-side error
-      console.error('Server-side error:', error);
       if (error.error.errors && Array.isArray(error.error.errors)) {
         errorMessage = error.error.errors.join(', ');
       } else if (error.error.message) {
@@ -40,30 +39,70 @@ export class StudentService {
     return throwError(() => ({ message: errorMessage }));
   }
 
-  getAllStudents(): Observable<Student[]> {
-    return this.http.get<Student[]>(this.apiUrl)
-      .pipe(catchError(this.handleError));
+  getStudents(): Observable<Student[]> {
+    return this.http.get<any>(this.apiUrl)
+      .pipe(
+        map(response => {
+          // Handle different response formats
+          if (Array.isArray(response)) {
+            return response;
+          } else if (response && response.data && Array.isArray(response.data)) {
+            return response.data;
+          } else {
+            return [];
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
   getStudent(id: string): Observable<Student> {
-    return this.http.get<Student>(`${this.apiUrl}/${id}`)
-      .pipe(catchError(this.handleError));
+    return this.http.get<any>(`${this.apiUrl}/${id}`)
+      .pipe(
+        map(response => {
+          // Handle different response formats
+          if (response && response.data) {
+            return response.data;
+          }
+          return response;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   createStudent(student: Student): Observable<Student> {
-    console.log('Creating student:', student);
-    return this.http.post<Student>(this.apiUrl, student)
-      .pipe(catchError(this.handleError));
+    return this.http.post<any>(this.apiUrl, student)
+      .pipe(
+        map(response => {
+          // Handle different response formats
+          if (response && response.data) {
+            return response.data;
+          }
+          return response;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   updateStudent(id: string, student: Student): Observable<Student> {
-    console.log('Updating student:', { id, student });
-    return this.http.put<Student>(`${this.apiUrl}/${id}`, student)
-      .pipe(catchError(this.handleError));
+    return this.http.put<any>(`${this.apiUrl}/${id}`, student)
+      .pipe(
+        map(response => {
+          // Handle different response formats
+          if (response && response.data) {
+            return response.data;
+          }
+          return response;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   deleteStudent(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`)
-      .pipe(catchError(this.handleError));
+    return this.http.delete<any>(`${this.apiUrl}/${id}`)
+      .pipe(
+        map(() => {}),
+        catchError(this.handleError)
+      );
   }
 }

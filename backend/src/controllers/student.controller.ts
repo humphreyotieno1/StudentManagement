@@ -7,11 +7,17 @@ export const studentController = {
     // Get all students
     getAllStudents: async (req: Request, res: Response) => {
         try {
-            const students = await Student.find().sort({ lastName: 1, firstName: 1 });
-            res.status(200).json(students);
+            const students = await Student.find().sort({ createdAt: -1 });
+            res.status(200).json({
+                success: true,
+                data: students
+            });
         } catch (error: any) {
             console.error('Error fetching students:', error);
-            res.status(500).json({ message: 'Error fetching students', error: error.message });
+            res.status(500).json({
+                success: false,
+                error: error.message
+            });
         }
     },
 
@@ -20,90 +26,87 @@ export const studentController = {
         try {
             const student = await Student.findById(req.params.id);
             if (!student) {
-                return res.status(404).json({ message: 'Student not found' });
+                return res.status(404).json({
+                    success: false,
+                    error: 'Student not found'
+                });
             }
-            res.status(200).json(student);
+            res.status(200).json({
+                success: true,
+                data: student
+            });
         } catch (error: any) {
             console.error('Error fetching student:', error);
-            res.status(500).json({ message: 'Error fetching student', error: error.message });
+            res.status(500).json({
+                success: false,
+                error: error.message
+            });
         }
     },
 
     // Create student
-    createStudent: async (req: Request<{}, {}, IStudent>, res: Response) => {
+    createStudent: async (req: Request, res: Response) => {
         try {
-            console.log('Received student data:', req.body);
-
-            // Convert and validate data types
-            const studentData = {
-                ...req.body,
+            const studentData: IStudent = {
+                studentId: req.body.studentId,
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
                 dateOfBirth: new Date(req.body.dateOfBirth),
-                gpa: parseFloat(req.body.gpa.toString()),
-                enrollmentDate: new Date()
+                major: req.body.major,
+                gpa: parseFloat(req.body.gpa),
+                contactNumber: req.body.contactNumber,
+                program: req.body.program,
+                semester: req.body.semester,
+                status: req.body.status,
+                enrollmentDate: new Date(req.body.enrollmentDate)
             };
 
-            console.log('Processed student data:', studentData);
-
-            // Create new student instance
             const student = new Student(studentData);
+            await student.save();
 
-            // Validate the document
-            const validationError = student.validateSync();
-            if (validationError) {
-                console.error('Validation error:', validationError);
-                return res.status(400).json({
-                    message: 'Validation error',
-                    errors: Object.values(validationError.errors).map(err => err.message)
-                });
-            }
-
-            // Save the document
-            const savedStudent = await student.save();
-            console.log('Student saved successfully:', savedStudent);
-            res.status(201).json(savedStudent);
+            res.status(201).json({
+                success: true,
+                data: student
+            });
         } catch (error: any) {
-            console.error('Error creating student:', error);
-            
-            // Handle duplicate key error
             if (error.code === 11000) {
                 return res.status(400).json({
-                    message: 'Validation error',
-                    errors: ['Email address is already in use']
+                    success: false,
+                    error: 'Student ID or Email already exists'
                 });
             }
-
-            // Handle validation errors
             if (error.name === 'ValidationError') {
                 return res.status(400).json({
-                    message: 'Validation error',
+                    success: false,
+                    error: 'Validation error',
                     errors: Object.values(error.errors).map((err: any) => err.message)
                 });
             }
-
-            // Handle other errors
-            res.status(500).json({
-                message: 'Error creating student',
-                error: error.message,
-                stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            res.status(400).json({
+                success: false,
+                error: error.message
             });
         }
     },
 
     // Update student
-    updateStudent: async (req: Request<{ id: string }, {}, Partial<IStudent>>, res: Response) => {
+    updateStudent: async (req: Request, res: Response) => {
         try {
-            // Convert and validate data types
-            const studentData = {
-                ...req.body,
+            const studentData: Partial<IStudent> = {
+                studentId: req.body.studentId,
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
                 dateOfBirth: req.body.dateOfBirth ? new Date(req.body.dateOfBirth) : undefined,
-                gpa: req.body.gpa ? parseFloat(req.body.gpa.toString()) : undefined,
+                major: req.body.major,
+                gpa: req.body.gpa ? parseFloat(req.body.gpa) : undefined,
+                contactNumber: req.body.contactNumber,
+                program: req.body.program,
+                semester: req.body.semester,
+                status: req.body.status,
                 enrollmentDate: req.body.enrollmentDate ? new Date(req.body.enrollmentDate) : undefined
             };
-
-            // Remove undefined values
-            Object.keys(studentData).forEach(key => 
-                studentData[key as keyof typeof studentData] === undefined && delete studentData[key as keyof typeof studentData]
-            );
 
             const student = await Student.findByIdAndUpdate(
                 req.params.id,
@@ -112,31 +115,32 @@ export const studentController = {
             );
 
             if (!student) {
-                return res.status(404).json({ message: 'Student not found' });
-            }
-
-            res.status(200).json(student);
-        } catch (error: any) {
-            console.error('Error updating student:', error);
-            
-            // Handle duplicate key error
-            if (error.code === 11000) {
-                return res.status(400).json({
-                    message: 'Validation error',
-                    errors: ['Email address is already in use']
+                return res.status(404).json({
+                    success: false,
+                    error: 'Student not found'
                 });
             }
 
-            // Handle validation errors
+            res.status(200).json({
+                success: true,
+                data: student
+            });
+        } catch (error: any) {
+            if (error.code === 11000) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Student ID or Email already exists'
+                });
+            }
             if (error.name === 'ValidationError') {
                 return res.status(400).json({
-                    message: 'Validation error',
+                    success: false,
+                    error: 'Validation error',
                     errors: Object.values(error.errors).map((err: any) => err.message)
                 });
             }
-
-            res.status(500).json({
-                message: 'Error updating student',
+            res.status(400).json({
+                success: false,
                 error: error.message
             });
         }
@@ -147,12 +151,21 @@ export const studentController = {
         try {
             const student = await Student.findByIdAndDelete(req.params.id);
             if (!student) {
-                return res.status(404).json({ message: 'Student not found' });
+                return res.status(404).json({
+                    success: false,
+                    error: 'Student not found'
+                });
             }
-            res.status(200).json({ message: 'Student deleted successfully' });
+            res.status(200).json({
+                success: true,
+                data: {}
+            });
         } catch (error: any) {
             console.error('Error deleting student:', error);
-            res.status(500).json({ message: 'Error deleting student', error: error.message });
+            res.status(500).json({
+                success: false,
+                error: error.message
+            });
         }
     }
 };

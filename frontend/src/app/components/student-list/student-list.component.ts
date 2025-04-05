@@ -1,214 +1,189 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { StudentService } from '../../services/student.service';
 import { Student } from '../../models/student.model';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-student-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatSnackBarModule,
+    MatDialogModule
+  ],
   template: `
-    <div class="container mt-4">
-      <div class="list-container">
-        <div class="header-section">
-          <h2 class="list-title">Student Details</h2>
-          <a href="/new" class="add-button">
-            <span class="add-icon">+</span>
+    <div class="list-container">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Student Records</mat-card-title>
+          <div class="spacer"></div>
+          <button mat-raised-button color="primary" routerLink="/students/new">
+            <mat-icon>add</mat-icon>
             Add New Student
-          </a>
-        </div>
-        
-        <div class="table-container">
+          </button>
+        </mat-card-header>
+
+        <mat-card-content>
           <div *ngIf="students.length === 0" class="empty-state">
-            <div class="empty-icon">👥</div>
+            <mat-icon class="empty-icon">school</mat-icon>
             <h3>No Student Records Found</h3>
             <p>Get started by adding your first student record</p>
-            <a href="/new" class="btn btn-primary">Add Student</a>
+            <button mat-raised-button color="primary" routerLink="/students/new">
+              Add Student
+            </button>
           </div>
 
-          <div *ngIf="students.length > 0" class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Student Name</th>
-                  <th>Contact</th>
-                  <th>Academic Info</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let student of students">
-                  <td>
-                    <div class="student-name">
-                      <div class="name">{{ student.firstName }} {{ student.lastName }}</div>
-                      <div class="major">{{ student.major }}</div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="contact-info">
-                      <div class="email">{{ student.email }}</div>
-                      <div class="dob">DOB: {{ student.dateOfBirth | date:'mediumDate' }}</div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="academic-info">
-                      <div class="gpa">GPA: {{ student.gpa.toFixed(2) }}</div>
-                      <div class="enrollment">Enrolled: {{ student.enrollmentDate | date:'mediumDate' }}</div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="action-buttons">
-                      <a [href]="'/edit/' + student._id" class="action-btn edit-btn">
-                        <span class="btn-icon">✎</span>
-                        Edit
-                      </a>
-                      <button (click)="deleteStudent(student._id!)" class="action-btn delete-btn">
-                        <span class="btn-icon">🗑</span>
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
+          <div *ngIf="students.length > 0" class="table-container">
+            <table mat-table [dataSource]="students" class="mat-elevation-z8">
+              <!-- Student ID Column -->
+              <ng-container matColumnDef="studentId">
+                <th mat-header-cell *matHeaderCellDef>Student ID</th>
+                <td mat-cell *matCellDef="let student">{{ student.studentId }}</td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let student">
+                  <div class="student-name">
+                    <div class="name">{{ student.firstName }} {{ student.lastName }}</div>
+                    <div class="email">{{ student.email }}</div>
+                  </div>
+                </td>
+              </ng-container>
+
+              <!-- Program Column -->
+              <ng-container matColumnDef="program">
+                <th mat-header-cell *matHeaderCellDef>Program</th>
+                <td mat-cell *matCellDef="let student">
+                  <div class="program-info">
+                    <div class="program">{{ student.program }}</div>
+                    <div class="semester">Semester: {{ student.semester }}</div>
+                  </div>
+                </td>
+              </ng-container>
+
+              <!-- Status Column -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let student">
+                  <span class="status-badge" [ngClass]="student.status.toLowerCase()">
+                    {{ student.status | titlecase }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let student">
+                  <div class="action-buttons">
+                    <button mat-icon-button color="primary" [routerLink]="['/students', student._id, 'edit']">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteStudent(student)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
           </div>
-        </div>
-      </div>
+        </mat-card-content>
+      </mat-card>
     </div>
   `,
   styles: [`
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
     .list-container {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
 
-    .header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    .list-title {
-      color: #2c3e50;
-      font-size: 1.8rem;
-      font-weight: 600;
-      margin: 0;
-    }
-
-    .add-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      background-color: #4299e1;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-
-    .add-button:hover {
-      background-color: #3182ce;
-      transform: translateY(-1px);
-    }
-
-    .add-icon {
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-
-    .table-container {
-      margin-top: 1rem;
+    .spacer {
+      flex: 1 1 auto;
     }
 
     .empty-state {
       text-align: center;
-      padding: 3rem 1rem;
-      background: #f8fafc;
-      border-radius: 8px;
+      padding: 3rem;
+      color: #666;
     }
 
     .empty-icon {
-      font-size: 3rem;
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
       margin-bottom: 1rem;
     }
 
-    .empty-state h3 {
-      color: #2c3e50;
-      margin-bottom: 0.5rem;
-    }
-
-    .empty-state p {
-      color: #718096;
-      margin-bottom: 1.5rem;
-    }
-
-    .table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-    }
-
-    .table th {
-      background-color: #f8fafc;
-      padding: 1rem;
-      text-align: left;
-      font-weight: 600;
-      color: #4a5568;
-      border-bottom: 2px solid #e2e8f0;
-    }
-
-    .table td {
-      padding: 1rem;
-      border-bottom: 1px solid #e2e8f0;
-      vertical-align: middle;
+    .table-container {
+      margin-top: 1rem;
+      overflow-x: auto;
     }
 
     .student-name {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
+      .name {
+        font-weight: 500;
+      }
+      .email {
+        font-size: 0.875rem;
+        color: #666;
+      }
     }
 
-    .name {
+    .program-info {
+      .program {
+        font-weight: 500;
+      }
+      .semester {
+        font-size: 0.875rem;
+        color: #666;
+      }
+    }
+
+    .status-badge {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
       font-weight: 500;
-      color: #2c3e50;
-    }
+      text-transform: uppercase;
 
-    .major {
-      font-size: 0.875rem;
-      color: #718096;
-    }
+      &.active {
+        background-color: #e6f4ea;
+        color: #1e4620;
+      }
 
-    .contact-info, .academic-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
+      &.inactive {
+        background-color: #fce8e6;
+        color: #c5221f;
+      }
 
-    .email {
-      color: #2c3e50;
-      font-weight: 500;
-    }
+      &.graduated {
+        background-color: #e8f0fe;
+        color: #174ea6;
+      }
 
-    .dob, .enrollment {
-      font-size: 0.875rem;
-      color: #718096;
-    }
-
-    .gpa {
-      color: #2c3e50;
-      font-weight: 500;
+      &.suspended {
+        background-color: #fef7e0;
+        color: #a45c00;
+      }
     }
 
     .action-buttons {
@@ -216,87 +191,62 @@ import { Student } from '../../models/student.model';
       gap: 0.5rem;
     }
 
-    .action-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-    }
-
-    .edit-btn {
-      background-color: #ebf8ff;
-      color: #3182ce;
-    }
-
-    .edit-btn:hover {
-      background-color: #bee3f8;
-    }
-
-    .delete-btn {
-      background-color: #fff5f5;
-      color: #e53e3e;
-    }
-
-    .delete-btn:hover {
-      background-color: #fed7d7;
-    }
-
-    .btn-icon {
-      font-size: 1rem;
-    }
-
     @media (max-width: 768px) {
-      .header-section {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
+      .list-container {
+        padding: 0;
       }
 
-      .table-responsive {
-        overflow-x: auto;
-      }
-
-      .action-buttons {
-        flex-direction: column;
-      }
-
-      .action-btn {
-        width: 100%;
-        justify-content: center;
+      .table-container {
+        margin: 0 -1rem;
       }
     }
   `]
 })
 export class StudentListComponent implements OnInit {
   students: Student[] = [];
+  displayedColumns: string[] = ['studentId', 'name', 'program', 'status', 'actions'];
 
-  constructor(private studentService: StudentService) {}
+  constructor(
+    private studentService: StudentService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loadStudents();
   }
 
   loadStudents(): void {
-    this.studentService.getAllStudents().subscribe({
-      next: (data: Student[]) => this.students = data,
-      error: (error: Error) => console.error('Error loading students:', error)
+    this.studentService.getStudents().subscribe({
+      next: (students) => {
+        this.students = students;
+      },
+      error: (error) => {
+        this.snackBar.open('Error loading students', 'Close', { duration: 3000 });
+      }
     });
   }
 
-  deleteStudent(id: string): void {
-    if (confirm('Are you sure you want to delete this student?')) {
-      this.studentService.deleteStudent(id).subscribe({
-        next: () => {
-          this.students = this.students.filter(student => student._id !== id);
-        },
-        error: (error: Error) => console.error('Error deleting student:', error)
-      });
-    }
+  deleteStudent(student: Student): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Delete Student',
+        message: `Are you sure you want to delete ${student.firstName} ${student.lastName}?`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.studentService.deleteStudent(student._id!).subscribe({
+          next: () => {
+            this.snackBar.open('Student deleted successfully', 'Close', { duration: 3000 });
+            this.loadStudents();
+          },
+          error: (error) => {
+            this.snackBar.open('Error deleting student', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 } 

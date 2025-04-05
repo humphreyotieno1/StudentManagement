@@ -1,7 +1,14 @@
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
 import { IStudent } from '../types/student.types';
 
-const studentSchema = new Schema<IStudent>({
+const studentSchema = new mongoose.Schema<IStudent>({
+    studentId: {
+        type: String,
+        required: [true, 'Student ID is required'],
+        unique: true,
+        trim: true,
+        match: [/^[A-Z0-9]{8}$/, 'Student ID must be 8 characters (uppercase letters and numbers)']
+    },
     firstName: {
         type: String,
         required: [true, 'First name is required'],
@@ -17,20 +24,14 @@ const studentSchema = new Schema<IStudent>({
     email: {
         type: String,
         required: [true, 'Email is required'],
-        trim: true,
         unique: true,
+        trim: true,
         lowercase: true,
         match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please enter a valid email']
     },
     dateOfBirth: {
         type: Date,
-        required: [true, 'Date of birth is required'],
-        validate: {
-            validator: function(value: Date) {
-                return value instanceof Date && !isNaN(value.getTime());
-            },
-            message: 'Please enter a valid date'
-        }
+        required: [true, 'Date of birth is required']
     },
     major: {
         type: String,
@@ -41,33 +42,46 @@ const studentSchema = new Schema<IStudent>({
     gpa: {
         type: Number,
         required: [true, 'GPA is required'],
-        min: [0, 'GPA cannot be less than 0'],
-        max: [4, 'GPA cannot be more than 4'],
-        validate: {
-            validator: function(value: number) {
-                return !isNaN(value) && value >= 0 && value <= 4;
-            },
-            message: 'GPA must be a number between 0 and 4'
-        }
+        min: [0, 'GPA must be at least 0'],
+        max: [4, 'GPA cannot exceed 4']
+    },
+    contactNumber: {
+        type: String,
+        trim: true,
+        match: [/^\+?[0-9]{10,15}$/, 'Please enter a valid phone number']
+    },
+    program: {
+        type: String,
+        required: [true, 'Program is required'],
+        trim: true
+    },
+    semester: {
+        type: String,
+        required: [true, 'Semester is required'],
+        trim: true
+    },
+    status: {
+        type: String,
+        required: [true, 'Status is required'],
+        enum: {
+            values: ['Active', 'Inactive', 'Graduated', 'Suspended'],
+            message: 'Status must be one of: Active, Inactive, Graduated, Suspended'
+        },
+        default: 'Active'
     },
     enrollmentDate: {
         type: Date,
-        default: Date.now,
-        validate: {
-            validator: function(value: Date) {
-                return value instanceof Date && !isNaN(value.getTime());
-            },
-            message: 'Please enter a valid enrollment date'
-        }
+        required: [true, 'Enrollment date is required'],
+        default: Date.now
     }
 }, {
-    timestamps: true,
-    versionKey: false
+    timestamps: true
 });
 
 // Create indexes
 studentSchema.index({ email: 1 }, { unique: true });
 studentSchema.index({ lastName: 1, firstName: 1 });
+studentSchema.index({ major: 1 });
 
 // Export the model
-export const Student = model<IStudent>('Student', studentSchema);
+export const Student = mongoose.model<IStudent>('Student', studentSchema);

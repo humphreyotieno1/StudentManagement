@@ -1,4 +1,4 @@
-# Student Details
+# Student Management System
 
 A comprehensive full-stack solution for managing student information, developed with Angular, TypeScript, and Node.js.
 
@@ -7,11 +7,10 @@ A comprehensive full-stack solution for managing student information, developed 
 - Student information management
   - Complete CRUD operations for student profiles
   - Advanced form validation with real-time feedback
-  - Modern UI with responsive two-column layout
+  - Modern UI with responsive layout
   - Material Design-inspired components
   - Multi-layer data validation
-  - Secure authentication system
-  - Role-based access control
+  - Responsive navigation with mobile support
 
 ## Prerequisites
 
@@ -24,7 +23,7 @@ A comprehensive full-stack solution for managing student information, developed 
 ## Project Structure
 
 ```
-student-details/
+student-management/
 ├── frontend/          # Angular frontend application
 │   ├── src/
 │   │   ├── app/      # Application components
@@ -32,22 +31,21 @@ student-details/
 │   │   │   ├── services/    # Business logic
 │   │   │   └── models/      # Data models
 │   │   ├── assets/   # Static assets
-│   │   └── styles/   # Global styles
+│   │   └── environments/   # Environment configurations
 └── backend/          # Node.js backend application
     ├── src/
     │   ├── controllers/  # Route controllers
     │   ├── models/       # Database models
     │   ├── routes/       # API routes
-    │   └── services/     # Business logic
-    └── migrations/       # Database migrations
+    │   └── migrations/   # Database migrations
 ```
 
 ## UI Features
 
-- Modern two-column form layout
-- Responsive design that adapts to all screen sizes
-- Real-time form validation with visual feedback
-- Clean and intuitive user interface
+- Modern responsive layout with navigation bar
+- Dashboard with student statistics
+- Student list with sorting and filtering
+- Comprehensive student form with validation
 - Material Design-inspired components
 - Smooth transitions and animations
 - Accessible form controls
@@ -83,17 +81,11 @@ student-details/
 3. Create a `.env` file in the backend directory:
    ```
    PORT=8000
-   MONGODB_URI=mongodb://localhost:27017/student_details
+   MONGODB_URI=mongodb://localhost:27017/student_records
    NODE_ENV=development
-   JWT_SECRET=your_jwt_secret_here
    ```
 
-4. Initialize the database:
-   ```bash
-   npm run db:init
-   ```
-
-5. Run database migrations:
+4. Run database migrations:
    ```bash
    npm run migrate:up
    ```
@@ -108,13 +100,6 @@ student-details/
 2. Install dependencies:
    ```bash
    npm install
-   ```
-
-3. Create a `.env` file in the frontend directory:
-   ```
-   API_URL=http://localhost:8000
-   ENVIRONMENT=development
-   APP_TITLE=Student Management System
    ```
 
 ## Running the Application
@@ -157,20 +142,17 @@ student-details/
 - `npm run dev`: Start development server with hot reloading
 - `npm run build`: Build TypeScript code
 - `npm start`: Start production server
-- `npm run db:init`: Initialize database
 - `npm run migrate:up`: Run database migrations
 - `npm run migrate:down`: Rollback migrations
 - `npm run migrate:status`: Check migration status
 - `npm run lint`: Run ESLint
 - `npm test`: Run tests
-- `npm run clean`: Clean build directory
 
 ### Frontend Scripts
 
 - `ng serve`: Start development server
 - `ng build`: Build production version
 - `ng test`: Run unit tests
-- `ng e2e`: Run end-to-end tests
 - `ng lint`: Run linting
 - `ng generate`: Generate components, services, etc.
 
@@ -187,18 +169,41 @@ The backend API provides the following endpoints:
 
 ## Student Data Model
 
-Each record includes:
+Each student record includes:
+- Student ID (required, 8 characters, uppercase letters and numbers)
 - First Name (required, min 2 chars)
 - Last Name (required, min 2 chars)
-- Email (required, unique, valid format)
-- Date of Birth (required, future dates invalid)
+- Email (required, valid format)
+- Date of Birth (required)
 - Major (required, min 2 chars)
 - GPA (required, 0.0-4.0 scale)
-- Enrollment Date (auto-set)
+- Contact Number (optional, 10-15 digits)
+- Program (required)
+- Semester (required)
+- Status (required, Active/Inactive/Graduated/Suspended)
+- Enrollment Date (required, defaults to current date)
 
 ## UI Components
 
-### Form Layout
+### Navigation
+- Responsive navigation bar
+- Mobile-friendly menu
+- Active route highlighting
+- Smooth transitions
+
+### Dashboard
+- Student statistics overview
+- Total students count
+- Active students count
+- New enrollments this month
+
+### Student List
+- Sortable columns
+- Filtering capabilities
+- Action buttons for edit/delete
+- Responsive table layout
+
+### Student Form
 - Two-column responsive grid layout
 - Clear visual hierarchy
 - Intuitive field grouping
@@ -213,23 +218,6 @@ Each record includes:
 - Error state handling
 - Loading states
 - Responsive breakpoints
-
-## Security Features
-
-- JWT-based authentication
-- Password hashing with bcrypt
-- Rate limiting
-- Input sanitization
-- CORS protection
-- XSS prevention
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/new-feature`)
-3. Commit changes (`git commit -m 'Add new feature'`)
-4. Push to branch (`git push origin feature/new-feature`)
-5. Open Pull Request
 
 ## License
 

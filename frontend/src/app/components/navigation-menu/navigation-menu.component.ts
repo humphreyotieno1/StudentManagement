@@ -1,33 +1,59 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-navigation-menu',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, MatIconModule],
   template: `
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-      <div class="container">
-        <a class="navbar-brand" routerLink="/new">Student Details</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/new" routerLinkActive="active">Add Student</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/list" routerLinkActive="active">View Students</a>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <nav class="main-nav">
+      <a routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon>
+        Dashboard
+      </a>
+      <a routerLink="/students" routerLinkActive="active">
+        <mat-icon>school</mat-icon>
+        Student Records
+      </a>
+      <a routerLink="/reports" routerLinkActive="active">
+        <mat-icon>assessment</mat-icon>
+        Reports
+      </a>
     </nav>
   `,
   styles: [`
-    .active {
-      font-weight: bold;
+    .main-nav {
+      display: flex;
+      gap: 2rem;
+      padding: 1rem;
+      background-color: #2c3e50;
+    }
+
+    .main-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .main-nav a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .main-nav a.active {
+      background-color: #3498db;
+    }
+
+    @media (max-width: 768px) {
+      .main-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
     }
   `]
 })
