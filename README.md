@@ -78,11 +78,13 @@ student-management/
    npm install
    ```
 
-3. Create a `.env` file in the backend directory:
+3. Create a `.env` file in the backend directory with the following content:
    ```
    PORT=8000
    MONGODB_URI=mongodb://localhost:27017/student_records
    NODE_ENV=development
+   RATE_LIMIT_WINDOW=15
+   RATE_LIMIT_MAX=100
    ```
 
 4. Run database migrations:
@@ -100,6 +102,13 @@ student-management/
 2. Install dependencies:
    ```bash
    npm install
+   ```
+
+3. Create a `.env` file in the frontend directory with the following content:
+   ```
+   API_URL=http://localhost:8000
+   ENVIRONMENT=development
+   APP_TITLE=Student Management System
    ```
 
 ## Running the Application
@@ -218,6 +227,7 @@ Each student record includes:
 - Error state handling
 - Loading states
 - Responsive breakpoints
+
 
 ## License
 
