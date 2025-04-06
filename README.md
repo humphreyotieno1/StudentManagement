@@ -1,136 +1,118 @@
-# Students System
+# Student Management System
 
-A modern, minimalist full-stack solution for managing student information, developed with Angular, TypeScript, and Node.js.
+A modern web application for managing student records, built with Angular and Node.js.
 
 ## Features
 
-- Student information management
-  - Complete CRUD operations for student profiles
-  - Advanced form validation with real-time feedback
-  - Clean, minimalist UI with responsive layout
-  - Material Design-inspired components
-  - Multi-layer data validation
-  - Responsive navigation with mobile support
+- Student CRUD operations
+- Comprehensive student information management
+- Real-time form validation
+- Responsive design
+- Status tracking for students
+- Academic information management
+
+## Tech Stack
+
+### Frontend
+- Angular 17
+- TypeScript
+- RxJS
+- Angular Router
+- Angular Forms
+
+### Backend
+- Node.js
+- Express.js
+- SQLite3
+- Knex.js (Query Builder)
+- CORS
 
 ## Prerequisites
 
-- Node.js (v16 or higher)
-- MongoDB Community Edition (v6.0 or higher)
-- Angular CLI (v16 or higher)
-- npm or yarn package manager
-- Git
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+- Angular CLI (v17 or higher)
 
-## Project Structure
+## Installation
 
-```
-student-management/
-├── frontend/          # Angular frontend application
-│   ├── src/
-│   │   ├── app/      # Application components
-│   │   │   ├── components/  # UI components
-│   │   │   ├── services/    # Business logic
-│   │   │   └── models/      # Data models
-│   │   ├── assets/   # Static assets
-│   │   └── environments/   # Environment configurations
-└── backend/          # Node.js backend application
-    ├── src/
-    │   ├── controllers/  # Route controllers
-    │   ├── models/       # Database models
-    │   ├── routes/       # API routes
-    │   └── migrations/   # Database migrations
-```
-
-## UI Features
-
-- Clean, minimalist responsive layout with navigation bar
-- Dashboard with student statistics
-- Student list with sorting and filtering
-- Comprehensive student form with validation
-- Material Design-inspired components
-- Smooth transitions and animations
-- Accessible form controls
-- Mobile-friendly interface
-
-## Setup Instructions
-
-### MongoDB Installation
-
-1. Download MongoDB Community Server from [MongoDB Download Center](https://www.mongodb.com/try/download/community)
-2. Run the installer and follow the installation wizard
-3. Create a data directory:
+1. Clone the repository:
    ```bash
-   mkdir C:\data\db
-   ```
-4. Start MongoDB service:
-   ```bash
-   net start MongoDB
+   git clone [repository-url]
    ```
 
-### Backend Setup
-
-1. Navigate to the backend directory:
+2. Install backend dependencies:
    ```bash
    cd backend
-   ```
-
-2. Install dependencies:
-   ```bash
    npm install
    ```
 
-3. Create a `.env` file in the backend directory with the following content:
-   ```
-   PORT=8000
-   MONGODB_URI=mongodb://localhost:27017/student_info
-   NODE_ENV=development
-   RATE_LIMIT_WINDOW=15
-   RATE_LIMIT_MAX=100
-   ```
-
-4. Run database migrations:
+3. Install frontend dependencies:
    ```bash
-   npm run migrate:up
-   ```
-
-### Frontend Setup
-
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-
-2. Install dependencies:
-   ```bash
+   cd ../frontend
    npm install
    ```
 
-3. Start the development server:
+## Database Setup
+
+1. Create the database and run migrations:
    ```bash
-   ng serve
+   cd backend
+   npx knex migrate:latest
    ```
 
-4. Open your browser and navigate to `http://localhost:4200`
+2. Seed the database with sample data:
+   ```bash
+   npx knex seed:run
+   ```
 
 ## Running the Application
 
 1. Start the backend server:
    ```bash
    cd backend
-   npm start
+   node server.js
    ```
+   The server will run on http://localhost:8000
 
-2. Start the frontend development server:
+2. Start the frontend application:
    ```bash
    cd frontend
-   ng serve
+   npm start
    ```
+   The application will be available at http://localhost:4200
 
-3. Open your browser and navigate to `http://localhost:4200`
+## API Endpoints
 
-## API Documentation
+### Students
+- GET `/api/students` - Get all students
+- GET `/api/students/:id` - Get a specific student
+- POST `/api/students` - Create a new student
+- PUT `/api/students/:id` - Update a student
+- DELETE `/api/students/:id` - Delete a student
 
-The API documentation is available at `http://localhost:8000/api-docs` when the backend server is running.
+## Data Model
+
+### Student
+- studentId (string, primary key)
+- firstName (string)
+- lastName (string)
+- email (string, unique)
+- dateOfBirth (date)
+- major (string)
+- program (string)
+- semester (string)
+- gpa (decimal)
+- enrollmentDate (date)
+- status (enum: Active, Inactive, Graduated, Suspended, On Leave)
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License. 

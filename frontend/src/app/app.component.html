@@ -177,44 +177,21 @@
   }
 </style>
 
-<!-- Main App Component -->
+<!-- Main App Container -->
 <div class="app-container">
-  <!-- Header -->
+  <!-- Simple Header -->
   <header class="header">
-    <div class="container header-content">
-      <div class="logo">
-        <h1>Students System</h1>
-      </div>
-      <nav class="nav">
-        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-          <mat-icon>dashboard</mat-icon>
-          <span>Dashboard</span>
-        </a>
-        <a routerLink="/students" routerLinkActive="active">
-          <mat-icon>school</mat-icon>
-          <span>Students</span>
-        </a>
-        <a routerLink="/reports" routerLinkActive="active">
-          <mat-icon>assessment</mat-icon>
-          <span>Reports</span>
-        </a>
-      </nav>
-    </div>
+    <h1>{{title}}</h1>
+    <nav class="nav">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/students" routerLinkActive="active">Students</a>
+    </nav>
   </header>
 
   <!-- Main Content -->
-  <main class="main">
-    <div class="container">
-      <router-outlet></router-outlet>
-    </div>
+  <main class="main-content">
+    <router-outlet></router-outlet>
   </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <p>&copy; 2025 Students System</p>
-    </div>
-  </footer>
 </div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
