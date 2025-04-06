@@ -179,48 +179,43 @@
 
 <!-- Main App Component -->
 <div class="app-container">
-  <!-- Header Section -->
-  <header class="app-header">
-    <div class="header-content">
-      <div class="logo-section">
-        <h1 class="system-title">Students System</h1>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-content">
+      <div class="logo">
+        <h1>Students System</h1>
       </div>
-      <nav class="main-nav">
-        <a routerLink="/dashboard" routerLinkActive="active">
-          <i class="fas fa-chart-line"></i>
-          Dashboard
+      <nav class="nav">
+        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
         </a>
         <a routerLink="/students" routerLinkActive="active">
-          <i class="fas fa-user-graduate"></i>
-          Student Records
+          <mat-icon>school</mat-icon>
+          <span>Students</span>
         </a>
         <a routerLink="/reports" routerLinkActive="active">
-          <i class="fas fa-file-alt"></i>
-          Reports
+          <mat-icon>assessment</mat-icon>
+          <span>Reports</span>
         </a>
       </nav>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main class="app-content">
-    <div class="content-wrapper">
+  <main class="main">
+    <div class="container">
       <router-outlet></router-outlet>
     </div>
   </main>
 
-  <!-- Footer Section -->
-  <footer class="app-footer">
-    <div class="footer-content">
-      <p>&copy; 2024 Students System. All rights reserved.</p>
-      <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Contact Us</a>
-      </div>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Students System</p>
     </div>
   </footer>
-  </div>
+</div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
@@ -229,6 +224,3 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
-<router-outlet />

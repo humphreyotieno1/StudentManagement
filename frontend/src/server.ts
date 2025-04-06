@@ -40,13 +40,18 @@ app.use(
 /**
  * Handle all other requests by rendering the Angular application.
  */
-app.use('/**', (req, res, next) => {
-  angularApp
-    .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
-    .catch(next);
+app.use('/**', async (req, res, next) => {
+  try {
+    const response = await angularApp.handle(req);
+    if (response) {
+      await writeResponseToNodeResponse(response, res);
+    } else {
+      next();
+    }
+  } catch (error) {
+    console.error('SSR Error:', error);
+    next(error);
+  }
 });
 
 /**

@@ -8,8 +8,7 @@ module.exports = {
           properties: {
             studentId: {
               bsonType: "string",
-              description: "must be a string and is required",
-              unique: true
+              description: "must be a string and is required"
             },
             firstName: {
               bsonType: "string",
@@ -22,14 +21,14 @@ module.exports = {
             email: {
               bsonType: "string",
               pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-              description: "must be a valid email and is required",
-              unique: true
+              description: "must be a valid email and is required"
             },
             enrollmentDate: {
               bsonType: "date",
               description: "must be a date and is required"
             },
             status: {
+              bsonType: "string",
               enum: ["active", "inactive", "graduated", "suspended"],
               description: "must be one of the enum values and is required"
             },

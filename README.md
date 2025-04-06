@@ -1,13 +1,13 @@
-# Student Management System
+# Students System
 
-A comprehensive full-stack solution for managing student information, developed with Angular, TypeScript, and Node.js.
+A modern, minimalist full-stack solution for managing student information, developed with Angular, TypeScript, and Node.js.
 
 ## Features
 
 - Student information management
   - Complete CRUD operations for student profiles
   - Advanced form validation with real-time feedback
-  - Modern UI with responsive layout
+  - Clean, minimalist UI with responsive layout
   - Material Design-inspired components
   - Multi-layer data validation
   - Responsive navigation with mobile support
@@ -42,7 +42,7 @@ student-management/
 
 ## UI Features
 
-- Modern responsive layout with navigation bar
+- Clean, minimalist responsive layout with navigation bar
 - Dashboard with student statistics
 - Student list with sorting and filtering
 - Comprehensive student form with validation
@@ -81,7 +81,7 @@ student-management/
 3. Create a `.env` file in the backend directory with the following content:
    ```
    PORT=8000
-   MONGODB_URI=mongodb://localhost:27017/student_records
+   MONGODB_URI=mongodb://localhost:27017/student_info
    NODE_ENV=development
    RATE_LIMIT_WINDOW=15
    RATE_LIMIT_MAX=100
@@ -104,131 +104,33 @@ student-management/
    npm install
    ```
 
-3. Create a `.env` file in the frontend directory with the following content:
+3. Start the development server:
+   ```bash
+   ng serve
    ```
-   API_URL=http://localhost:8000
-   ENVIRONMENT=development
-   APP_TITLE=Student Management System
-   ```
+
+4. Open your browser and navigate to `http://localhost:4200`
 
 ## Running the Application
-
-### Development Mode
 
 1. Start the backend server:
    ```bash
    cd backend
-   npm run dev
+   npm start
    ```
-   The backend will run on http://localhost:8000
 
 2. Start the frontend development server:
    ```bash
    cd frontend
    ng serve
    ```
-   The frontend will run on http://localhost:4200
 
-### Production Mode
-
-1. Build the frontend:
-   ```bash
-   cd frontend
-   ng build --configuration production
-   ```
-
-2. Start the backend server:
-   ```bash
-   cd backend
-   npm run build
-   npm start
-   ```
-
-## Available Scripts
-
-### Backend Scripts
-
-- `npm run dev`: Start development server with hot reloading
-- `npm run build`: Build TypeScript code
-- `npm start`: Start production server
-- `npm run migrate:up`: Run database migrations
-- `npm run migrate:down`: Rollback migrations
-- `npm run migrate:status`: Check migration status
-- `npm run lint`: Run ESLint
-- `npm test`: Run tests
-
-### Frontend Scripts
-
-- `ng serve`: Start development server
-- `ng build`: Build production version
-- `ng test`: Run unit tests
-- `ng lint`: Run linting
-- `ng generate`: Generate components, services, etc.
+3. Open your browser and navigate to `http://localhost:4200`
 
 ## API Documentation
 
-The backend API provides the following endpoints:
-
-### Student Records
-- `GET /api/students`: Get all student records
-- `GET /api/students/:id`: Get specific student record
-- `POST /api/students`: Create new student record
-- `PUT /api/students/:id`: Update student record
-- `DELETE /api/students/:id`: Delete student record
-
-## Student Data Model
-
-Each student record includes:
-- Student ID (required, 8 characters, uppercase letters and numbers)
-- First Name (required, min 2 chars)
-- Last Name (required, min 2 chars)
-- Email (required, valid format)
-- Date of Birth (required)
-- Major (required, min 2 chars)
-- GPA (required, 0.0-4.0 scale)
-- Contact Number (optional, 10-15 digits)
-- Program (required)
-- Semester (required)
-- Status (required, Active/Inactive/Graduated/Suspended)
-- Enrollment Date (required, defaults to current date)
-
-## UI Components
-
-### Navigation
-- Responsive navigation bar
-- Mobile-friendly menu
-- Active route highlighting
-- Smooth transitions
-
-### Dashboard
-- Student statistics overview
-- Total students count
-- Active students count
-- New enrollments this month
-
-### Student List
-- Sortable columns
-- Filtering capabilities
-- Action buttons for edit/delete
-- Responsive table layout
-
-### Student Form
-- Two-column responsive grid layout
-- Clear visual hierarchy
-- Intuitive field grouping
-- Real-time validation feedback
-- Mobile-optimized design
-
-### Styling Features
-- Modern color scheme
-- Consistent spacing and typography
-- Smooth transitions and animations
-- Accessible form controls
-- Error state handling
-- Loading states
-- Responsive breakpoints
-
+The API documentation is available at `http://localhost:8000/api-docs` when the backend server is running.
 
 ## License
 
-This project is licensed under the MIT License. 
+This project is licensed under the MIT License - see the LICENSE file for details. 
