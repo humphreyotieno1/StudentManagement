@@ -52,6 +52,24 @@ A modern web application for managing student records, built with Angular and No
    npm install
    ```
 
+## Environment Configuration
+
+### Backend (.env)
+Create a `.env` file in the backend directory with the following variables:
+```
+PORT=8000
+NODE_ENV=development
+DB_CLIENT=sqlite3
+DB_FILENAME=./db/dev.sqlite3
+CORS_ORIGIN=http://localhost:4200
+```
+
+### Frontend (.env)
+Create a `.env` file in the frontend directory with the following variables:
+```
+API_URL=http://localhost:8000/api
+```
+
 ## Database Setup
 
 1. Create the database and run migrations:
